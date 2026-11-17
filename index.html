@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ちゅなちゃんラン">
+<meta name="theme-color" content="#7fc8ff">
+<title>ちゅなちゃんラン</title>
+<link rel="icon" href="img/icon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&family=M+PLUS+Rounded+1c:wght@700;900&display=swap">
+<link rel="stylesheet" href="css/run.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas>
+
+  <!-- あそんで いる とき の ボタン -->
+  <div id="play" class="play" hidden>
+    <button id="btnPause" class="btn-pause" type="button" aria-label="ひとやすみ">⏸</button>
+    <button id="btnJump" class="pbtn btn-jump" type="button">ジャンプ</button>
+    <button id="btnMagic" class="pbtn btn-magic" type="button"><span class="lbl">まほう</span></button>
+    <button id="btnSpecial" class="pbtn btn-special" type="button"><span class="lbl">ひっさつ</span><span class="gauge"><i></i></span></button>
+  </div>
+
+  <!-- タイトル -->
+  <div id="scrTitle" class="scr title" hidden>
+    <h1 class="logo"><span>ちゅなちゃん</span><b>ラン</b></h1>
+    <div class="title-hero"><div id="titleChara" class="title-chara"></div></div>
+    <div class="title-best" id="titleBest"></div>
+    <div class="title-btns">
+      <button type="button" class="big go" id="goStart">▶ スタート</button>
+      <div class="row">
+        <button type="button" class="mid" id="goChara">🧑‍🤝‍🧑 キャラへんこう</button>
+        <button type="button" class="mid" id="goRank">🏆 ランキング</button>
+      </div>
+    </div>
+    <div class="keys">パソコン：スペース ＝ ジャンプ・Z ＝ まほう・X ＝ ひっさつ・P ＝ ひとやすみ</div>
+  </div>
+
+  <!-- キャラ へんこう -->
+  <div id="scrChara" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>だれ で はしる？</h2>
+      <div id="charaList" class="chara-list"></div>
+      <div class="foot"><button type="button" class="mid" id="charaBack">きめた！</button></div>
+    </div>
+  </div>
+
+  <!-- ランキング -->
+  <div id="scrRank" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>🏆 ランキング</h2>
+      <div class="tabs"><button type="button" class="tab on" data-tab="rank">ベスト 10</button><button type="button" class="tab" data-tab="hist">りれき</button></div>
+      <div id="rankBody" class="rank-body"></div>
+      <div class="foot"><button type="button" class="mid" id="rankBack">もどる</button></div>
+    </div>
+  </div>
+
+  <!-- けっか -->
+  <div id="scrResult" class="scr card-scr" hidden>
+    <div class="card">
+      <h2 id="resTitle">ゴール！</h2>
+      <div id="resStats" class="res-stats"></div>
+      <div id="resEntry" class="res-entry" hidden>
+        <div class="rank-in" id="resRankIn"></div>
+        <label class="name-lbl">なまえ を いれてね
+          <input id="resName" type="text" maxlength="10" autocomplete="off" enterkeyhint="done">
+        </label>
+        <div id="resNames" class="name-hist"></div>
+        <button type="button" class="mid go" id="resSave">ほぞん する</button>
+      </div>
+      <div id="resBtns" class="foot">
+        <button type="button" class="mid go" id="resAgain">もういちど</button>
+        <button type="button" class="mid" id="resTitleBtn">タイトルへ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ひとやすみ -->
+  <div id="scrPause" class="scr card-scr dim" hidden>
+    <div class="card small">
+      <h2>ひとやすみ ちゅう</h2>
+      <p class="sub">トイレ や ごはん に いって きても だいじょうぶ</p>
+      <div class="foot col">
+        <button type="button" class="mid go" id="pauseGo">▶ つづける</button>
+        <button type="button" class="mid" id="pauseQuit">やめて けっか へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+</div>
+<div id="rotate" class="rotate"><div>📱↻</div><div>がめん を よこ に してね</div></div>
+
+<script src="js/run_data.js"></script>
+<script src="js/run_game.js"></script>
+<script src="js/run_ui.js"></script>
+</body>
+</html>
