@@ -22,10 +22,10 @@ button { font-family: var(--body); cursor: pointer; }
 .play[hidden] { display: none; }
 .pbtn { position: absolute; pointer-events: auto; touch-action: none; border: 5px solid var(--ink); border-radius: 50%; font-weight: 900; color: var(--ink); box-shadow: 0 6px 0 rgba(30,10,60,.35); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0; opacity: .88; }
 .pbtn.on { transform: translateY(4px); box-shadow: 0 2px 0 rgba(30,10,60,.35); }
-.btn-jump { left: 18px; bottom: 12px; width: 128px; height: 128px; font-size: 24px; background: #d9f5ff; }
-.btn-magic { right: 18px; bottom: 12px; width: 122px; height: 122px; font-size: 24px; background: #efe0ff; }
+.btn-jump { right: 18px; bottom: 12px; width: 128px; height: 128px; font-size: 24px; background: #d9f5ff; }
+.btn-magic { left: 18px; bottom: 12px; width: 122px; height: 122px; font-size: 24px; background: #efe0ff; }
 .btn-magic.cool { opacity: .55; }
-.btn-special { right: 152px; bottom: 14px; width: 98px; height: 98px; font-size: 17px; background: #fff3c4; }
+.btn-special { left: 152px; bottom: 14px; width: 98px; height: 98px; font-size: 17px; background: #fff3c4; }
 .btn-special .gauge { width: 66px; height: 10px; border: 2px solid var(--ink); border-radius: 99px; background: #fff; overflow: hidden; }
 .btn-special .gauge i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffd84a, #ff6fa8); }
 .btn-special.full { animation: glow 0.8s ease-in-out infinite; background: #fff7a0; }
@@ -89,6 +89,13 @@ body.touch .keys { display: none; }
 .rank-body td.t { font-size: 13px; color: #7a6890; width: 130px; }
 .rank-body td.c img { height: 40px; vertical-align: middle; }
 .rank-body tr.me { background: #fff3c4; }
+.rank-body td.x { width: 1%; white-space: nowrap; text-align: right; }
+.rank-body .del { border: 3px solid var(--ink); border-radius: 12px; background: #fff; font-size: 18px; padding: 2px 8px; cursor: pointer; }
+.rank-body .ask { font-size: 15px; white-space: nowrap; }
+.rank-body .ask button { border: 3px solid var(--ink); border-radius: 12px; font-weight: 900; font-size: 16px; padding: 3px 10px; margin-left: 6px; cursor: pointer; }
+.rank-body .ask .yes { background: #ffb3c6; }
+.rank-body .ask .no { background: #fff; }
+.rank-body tr.asking { background: #ffe4ec; }
 .rank-body .empty { padding: 30px; text-align: center; color: #7a6890; font-weight: 900; }
 
 /* けっか */

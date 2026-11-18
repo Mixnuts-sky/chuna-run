@@ -77,7 +77,11 @@ function renderRank(highlightId) {
   const body = $('rankBody');
   if (UI.rankTab === 'rank') {
     if (!SAVE.ranking.length) { body.innerHTML = '<div class="empty">まだ きろく が ないよ。はしって みよう！</div>'; return; }
-    body.innerHTML = `<table>${SAVE.ranking.map((r, i) => `<tr class="${r.id && r.id === highlightId ? 'me' : ''}"><td class="n">${['🥇', '🥈', '🥉'][i] || i + 1}</td><td>${esc(r.name)}</td><td class="c">${charaCell(r.chara)}</td><td class="d">${r.dist} m</td><td class="t">${fmtDate(r.date)}</td></tr>`).join('')}</table>`;
+    body.innerHTML = `<table>${SAVE.ranking.map((r, i) => `<tr class="${r.id && r.id === highlightId ? 'me' : ''}${UI.askDel === i ? ' asking' : ''}"><td class="n">${['🥇', '🥈', '🥉'][i] || i + 1}</td><td>${esc(r.name)}</td><td class="c">${charaCell(r.chara)}</td><td class="d">${r.dist} m</td><td class="t">${fmtDate(r.date)}</td>`
+      + `<td class="x">${UI.askDel === i ? `<span class="ask">けす？<button type="button" class="yes" data-i="${i}">けす</button><button type="button" class="no">やめる</button></span>` : `<button type="button" class="del" data-i="${i}" aria-label="けす">🗑</button>`}</td></tr>`).join('')}</table>`;
+    body.querySelectorAll('.del').forEach((b) => b.addEventListener('click', () => { UI.askDel = +b.dataset.i; SFX.pop(); renderRank(highlightId); }));
+    body.querySelectorAll('.ask .no').forEach((b) => b.addEventListener('click', () => { UI.askDel = -1; SFX.pop(); renderRank(highlightId); }));
+    body.querySelectorAll('.ask .yes').forEach((b) => b.addEventListener('click', () => { deleteRanking(+b.dataset.i); UI.askDel = -1; SFX.bump(); renderRank(); }));
   } else {
     if (!SAVE.history.length) { body.innerHTML = '<div class="empty">まだ りれき が ないよ</div>'; return; }
     body.innerHTML = `<table>${SAVE.history.map((r) => `<tr><td class="t">${fmtDate(r.date)}</td><td class="c">${charaCell(r.chara)}</td><td class="d">${r.dist} m</td><td>🪙 ${r.coins}</td><td>${r.name ? `🏆 ${esc(r.name)}` : ''}</td></tr>`).join('')}</table>`;
@@ -86,8 +90,17 @@ function renderRank(highlightId) {
   if (me) me.scrollIntoView({ block: 'nearest' });
 }
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function deleteRanking(i) {
+  const r = SAVE.ranking[i];
+  if (!r) return;
+  SAVE.ranking.splice(i, 1);
+  const h = SAVE.history.find((x) => x.id === r.id);
+  if (h) delete h.name;
+  writeSave();
+}
 function openRank(tab = 'rank', highlightId = null) {
   UI.rankTab = tab;
+  UI.askDel = -1;
   show('rank');
   renderRank(highlightId);
 }
@@ -121,12 +134,17 @@ RUN.onGameOver = (r) => {
 function saveName() {
   const name = ($('resName').value || '').trim().slice(0, 10) || 'ななし';
   const run = UI.lastRun;
-  if (!run) return;
+  if (!run || run.saved) return;
+  run.saved = true;
   const h = SAVE.history.find((x) => x.id === run.id);
   addRanking(run, name);
   if (h) h.name = name;
   writeSave();
   SFX.win();
+  // ほぞん おわり：けっか に もどった とき は「もういちど」「タイトルへ」だけ に する
+  $('resEntry').hidden = true;
+  $('resBtns').hidden = false;
+  $('resRankIn').textContent = '';
   openRank('rank', run.id);
 }
 $('resSave').addEventListener('click', saveName);
