@@ -4,12 +4,14 @@
 // =====================================================================
 
 const UI = { scr: 'title', lastRun: null, rankTab: 'rank' };
-const SCREENS = { title: 'scrTitle', chara: 'scrChara', rank: 'scrRank', result: 'scrResult', pause: 'scrPause' };
+const SCREENS = { title: 'scrTitle', chara: 'scrChara', rank: 'scrRank', result: 'scrResult', pause: 'scrPause',
+  land: 'scrLand', dgEntry: 'scrDgEntry', dg: 'scrDg', dgEnd: 'scrDgEnd', gacha: 'scrGacha', gres: 'scrGRes', zukan: 'scrZukan', wear: 'scrWear', tickets: 'scrTickets' };
 const IS_TOUCH = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
 if (IS_TOUCH) document.body.classList.add('touch');
 
 function show(name) {
   UI.scr = name;
+  $('stage').scrollTop = 0; $('stage').scrollLeft = 0; // フォーカス で ぶたい が ずれない ように
   Object.entries(SCREENS).forEach(([k, id]) => { $(id).hidden = k !== name; });
   $('play').hidden = !(name === 'play' || name === 'pause');
   const first = name !== 'play' && $(SCREENS[name]) && $(SCREENS[name]).querySelector('button.go, button');
@@ -27,6 +29,7 @@ function fit() {
   cv.width = Math.round(W * VIEW_K); cv.height = Math.round(H * VIEW_K);
 }
 addEventListener('resize', fit);
+$('stage').addEventListener('scroll', (e) => { e.target.scrollTop = 0; e.target.scrollLeft = 0; }); // ぶたい は スクロール しない
 addEventListener('orientationchange', () => setTimeout(fit, 200));
 
 // ---------------------------------------------------------------------
@@ -111,6 +114,7 @@ document.querySelectorAll('#scrRank .tab').forEach((t) => t.addEventListener('cl
 // ---------------------------------------------------------------------
 RUN.onGameOver = (r) => {
   const run = { id: `${Date.now()}`, date: Date.now(), chara: r.chara, dist: r.dist, coins: r.coins, kills: r.kills };
+  LAND.coins += r.coins; writeLand(); // ちゅなランド の ちょきん
   const newBest = r.dist > (SAVE.best || 0);
   const slot = rankSlot(r.dist);
   addHistory(run);
@@ -118,7 +122,8 @@ RUN.onGameOver = (r) => {
   $('resTitle').textContent = newBest && r.dist > 0 ? '🚩 きろく こうしん！' : r.why;
   $('resStats').innerHTML = `<div class="st main"><small>はしった きょり</small><b>${r.dist} m</b></div>
     <div class="st"><small>コイン</small><b>${r.coins}</b></div><div class="st"><small>たおした かず</small><b>${r.kills}</b></div>
-    <div class="st"><small>キャラ</small><b style="font-size:20px">${CHARAS[r.chara].name}</b></div>`;
+    <div class="st"><small>キャラ</small><b style="font-size:20px">${CHARAS[r.chara].name}</b></div>
+    <div class="st bank"><small>🪙 ちょきん</small><b style="font-size:20px">${LAND.coins} コイン</b></div>`;
   $('resEntry').hidden = slot < 0;
   $('resBtns').hidden = slot >= 0;
   if (slot >= 0) {
@@ -208,6 +213,7 @@ addEventListener('keydown', (e) => {
   if (UI.scr === 'pause' && (e.code === 'KeyP' || e.code === 'Escape')) { resumeGame(); e.preventDefault(); return; }
   if (e.code === 'Escape' && (UI.scr === 'chara' || UI.scr === 'rank')) { $(UI.scr === 'chara' ? 'charaBack' : 'rankBack').click(); return; }
   if (UI.scr === 'title' && e.code === 'Space') { startGame(); e.preventDefault(); }
+  if (UI.scr === 'title' && e.code === 'Escape') toLand();
 });
 addEventListener('keyup', (e) => { if (UI.scr === 'play' && JUMP_KEYS.includes(e.code)) jumpUp(); });
 
@@ -230,7 +236,7 @@ RUN.onFrame = () => {
 loadSave();
 fit();
 loadImages().then(() => {
-  toTitle();
+  toLand();
   requestAnimationFrame(frame);
 });
 window.UI_TEST = { show, toTitle, startGame, openRank, openChara, pauseGame, resumeGame, saveName, UI };

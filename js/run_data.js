@@ -57,7 +57,7 @@ const pickItem = () => {
 // ---------------------------------------------------------------------
 const IMG = {};
 function loadImages() {
-  const names = ['chuna', 'kenshi', 'odoriko', 'grape', 'weo', 'family', 'shima', 'siren', 'ningyo', 'boss', 'nyanko'];
+  const names = ['chuna', 'kenshi', 'odoriko', 'grape', 'weo', 'family', 'shima', 'siren', 'ningyo', 'boss', 'nyanko'];  // シール の え は <img> で よむ
   return Promise.all(names.map((n) => new Promise((ok) => {
     const im = new Image();
     im.onload = () => { IMG[n] = im; ok(); };

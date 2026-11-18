@@ -6,14 +6,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ちゅなちゃんラン">
+<meta name="apple-mobile-web-app-title" content="ちゅなランド">
 <meta name="theme-color" content="#7fc8ff">
-<title>ちゅなちゃんラン</title>
+<title>ちゅなランド</title>
 <link rel="icon" href="img/icon.png">
 <link rel="apple-touch-icon" href="img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&family=M+PLUS+Rounded+1c:wght@700;900&display=swap">
 <link rel="stylesheet" href="css/run.css">
+<link rel="stylesheet" href="css/land.css">
 </head>
 <body>
 <div id="stage">
@@ -27,8 +28,146 @@
     <button id="btnSpecial" class="pbtn btn-special" type="button"><span class="lbl">ひっさつ</span><span class="gauge"><i></i></span></button>
   </div>
 
+  <!-- ちゅなランド -->
+  <div id="scrLand" class="scr land" hidden>
+    <h1 class="logo land-logo"><span>ちゅな</span><b>ランド</b></h1>
+    <div class="wallet"><span>🪙 <b id="wCoins">0</b> コイン</span><span>⭐ <b id="wPoints">0</b> ポイント</span></div>
+    <div class="attr">
+      <button type="button" class="att a-run" id="goRun"><i>🏃</i><b>ちゅなちゃんラン</b><small>はしって コイン を あつめる</small></button>
+      <button type="button" class="att a-dg" id="goDg"><i>📚</i><b>もんだい ダンジョン</b><small>コイン で はいって ポイント を もらう</small></button>
+      <button type="button" class="att a-map" id="goMap"><i>🗺️</i><b>ちず で おでかけ</b><small>ちず を みて つれて いこう</small></button>
+      <button type="button" class="att a-gacha" id="goGacha"><i>🎰</i><b>ガチャ</b><small>ポイント で まわす</small></button>
+    </div>
+    <div class="land-sub">
+      <button type="button" class="mid" id="goZukan">📒 シール ずかん</button>
+      <button type="button" class="mid" id="goWear">🎀 きせかえ</button>
+      <button type="button" class="mid" id="goTickets">🎟️ もってる けん <span id="tkBadge" class="badge" hidden></span></button>
+    </div>
+  </div>
+
+  <!-- もんだい ダンジョン：はいりぐち -->
+  <div id="scrDgEntry" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>📚 もんだい ダンジョン</h2>
+      <p class="sub center">10かい まで すすもう！ せいかい する と ⭐ポイント。たからばこ に コイン も あるよ</p>
+      <div class="pick-row" id="dgSubj"></div>
+      <div class="pick-row" id="dgDiff"></div>
+      <div class="dg-fee" id="dgFee"></div>
+      <div class="foot">
+        <button type="button" class="mid go" id="dgEnter">はいる！</button>
+        <button type="button" class="mid" id="dgEntryBack">もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- もんだい ダンジョン：なか -->
+  <div id="scrDg" class="scr dg" hidden>
+    <div class="dg-top">
+      <div class="dg-floor" id="dgFloor"></div>
+      <div class="dg-hearts" id="dgHearts"></div>
+      <div class="dg-pts" id="dgPts"></div>
+      <button type="button" class="dg-quit" id="dgQuit">🏳 かえる</button>
+    </div>
+    <div class="dg-room">
+      <div class="dg-mon" id="dgMon"><img id="dgMonImg" alt=""><div class="dg-mon-name" id="dgMonName"></div><div class="dg-mon-hp" id="dgMonHp"></div></div>
+      <button type="button" class="dg-chest" id="dgChest" hidden>🎁<small>タップ で あける</small></button>
+      <div class="dg-pop" id="dgPop"></div>
+    </div>
+    <div class="dg-q" id="dgQ">
+      <div class="dg-prompt"><div id="dgPrompt"></div><button type="button" class="dg-say" id="dgSay" hidden>🔊</button></div>
+      <div class="dg-opts" id="dgOpts"></div>
+    </div>
+  </div>
+
+  <!-- もんだい ダンジョン：おわり -->
+  <div id="scrDgEnd" class="scr card-scr" hidden>
+    <div class="card small">
+      <h2 id="dgEndTitle"></h2>
+      <div class="res-stats" id="dgEndStats"></div>
+      <div class="foot">
+        <button type="button" class="mid go" id="dgEndGacha">🎰 ガチャ へ</button>
+        <button type="button" class="mid" id="dgEndLand">🏠 もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ガチャ -->
+  <div id="scrGacha" class="scr card-scr" hidden>
+    <div class="card gacha-card">
+      <h2>🎰 ちゅな ガチャ</h2>
+      <div class="gacha-body">
+        <div class="machine" id="machine">
+          <div class="dome"><span>🔴</span><span>🟡</span><span>🔵</span><span>🟢</span><span>🟣</span><span>🟠</span><span>🔴</span><span>🔵</span></div>
+          <div class="mbody"><div class="slot" id="slot"></div></div>
+        </div>
+        <div class="gacha-side">
+          <div class="g-pts">⭐ <b id="gPts">0</b> ポイント</div>
+          <button type="button" class="big go" id="gPull1">まわす<small>⭐10</small></button>
+          <button type="button" class="mid" id="gPull10">10かい まわす（⭐100）</button>
+          <div class="stamp">
+            <div class="stamp-t">スタンプ <b id="gStamp">0</b> / 300</div>
+            <div class="stamp-bar"><i id="gStampBar"></i></div>
+            <div class="stamp-s">300こ で 🧸 めっっちゃ おおあたり かくてい！</div>
+          </div>
+          <button type="button" class="link" id="gOdds">かくりつ を みる</button>
+        </div>
+      </div>
+      <div class="foot"><button type="button" class="mid" id="gBack">もどる</button></div>
+    </div>
+  </div>
+  <div id="scrGRes" class="scr card-scr dim" hidden>
+    <div class="gres" id="gRes"></div>
+  </div>
+
+  <!-- シール ずかん -->
+  <div id="scrZukan" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>📒 シール ずかん <small id="zkCount"></small></h2>
+      <div class="zukan" id="zukan"></div>
+      <div class="foot"><button type="button" class="mid" id="zkBack">もどる</button></div>
+    </div>
+  </div>
+
+  <!-- きせかえ -->
+  <div id="scrWear" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>🎀 きせかえ</h2>
+      <div class="wear-body">
+        <div class="wear-prev" id="wearPrev"></div>
+        <div class="wear-lists">
+          <div class="wear-h">あたま</div><div class="wear-row" id="wearHat"></div>
+          <div class="wear-h">はしる と でる キラキラ</div><div class="wear-row" id="wearTrail"></div>
+          <p class="sub">ガチャ で でる と えらべる よ。ラン で つかえる！</p>
+        </div>
+      </div>
+      <div class="foot"><button type="button" class="mid" id="wearBack">もどる</button></div>
+    </div>
+  </div>
+
+  <!-- もってる けん -->
+  <div id="scrTickets" class="scr card-scr" hidden>
+    <div class="card">
+      <h2>🎟️ もってる けん</h2>
+      <div class="tickets" id="tickets"></div>
+      <div class="foot">
+        <button type="button" class="mid" id="tkBack">もどる</button>
+        <button type="button" class="mid parent" id="tkParent">🔒 おうち の ひと</button>
+      </div>
+    </div>
+  </div>
+  <div id="pinAsk" class="pin-layer" hidden>
+    <div class="card small">
+      <h2 id="pinTitle">ばんごう</h2>
+      <p class="sub" id="pinSub"></p>
+      <div class="pin-dots" id="pinDots"></div>
+      <div class="pin-pad" id="pinPad"></div>
+      <div class="foot"><button type="button" class="mid" id="pinCancel">やめる</button></div>
+    </div>
+  </div>
+
   <!-- タイトル -->
   <div id="scrTitle" class="scr title" hidden>
+    <button type="button" class="home-btn" id="runHome">🏠 ちゅなランド</button>
     <h1 class="logo"><span>ちゅなちゃん</span><b>ラン</b></h1>
     <div class="title-hero"><div id="titleChara" class="title-chara"></div></div>
     <div class="title-best" id="titleBest"></div>
@@ -99,6 +238,9 @@
 
 <script src="js/run_data.js"></script>
 <script src="js/run_game.js"></script>
+<script src="js/land_kanji.js"></script>
+<script src="js/land_data.js"></script>
 <script src="js/run_ui.js"></script>
+<script src="js/land_ui.js"></script>
 </body>
 </html>

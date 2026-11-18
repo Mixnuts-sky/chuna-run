@@ -381,6 +381,8 @@ function update(dt) {
   if (G.special && G.special.kind === 'rain' && Math.random() < 0.7) G.fx.push({ x: camX() + rnd(0, W), y: -20, vx: -120, vy: rnd(500, 700), life: 1.2, color: pick(['#fff3a0', '#ffd84a', '#ffffff']), size: rnd(8, 14), kind: 'star' });
   if (G.special && G.special.kind === 'dance' && Math.random() < 0.5) G.fx.push({ x: camX() + rnd(0, W), y: rnd(60, GROUND), vx: 0, vy: -80, life: 1, color: pick(['#ff6fa8', '#b98aff', '#ffd84a']), size: rnd(14, 20), kind: 'note' });
   if (G.buffs.rocket > 0 || (G.special && G.special.kind === 'dash')) G.fx.push({ x: G.x - 30, y: G.y - rnd(10, 80), vx: -G.speed * 0.6, vy: 0, life: 0.3, color: G.buffs.rocket > 0 ? '#ffb347' : '#a8d4ff', size: rnd(4, 9), kind: 'spark' });
+  const trail = LAND.wear.trail && WEAR[LAND.wear.trail];
+  if (trail && !G.over && Math.random() < 0.35) G.fx.push({ x: G.x - 26, y: G.y - rnd(10, 80), vx: -60, vy: rnd(-40, 20), life: 0.8, size: rnd(16, 24), kind: 'emo', text: trail.icon });
   if (G.water > 0 && Math.random() < 0.2) G.fx.push({ x: camX() + rnd(0, W), y: H, vx: 0, vy: -rnd(40, 90), life: 4, color: '#dff7ff', size: rnd(4, 10), kind: 'bubble' });
   // こうか・もじ
   G.fx.forEach((p) => { p.x += p.vx * dt; p.y += p.vy * dt; if (p.kind === 'spark' || p.kind === 'star') p.vy += 600 * dt * (p.kind === 'spark' ? 0 : 1); p.life -= dt; });
@@ -902,6 +904,8 @@ function drawHero() {
   if (G.barrier) { ctx.strokeStyle = 'rgba(140,210,255,.9)'; ctx.lineWidth = 4; ctx.fillStyle = 'rgba(170,225,255,.22)'; ctx.beginPath(); ctx.arc(sx, y - 56, 74 + Math.sin(G.t * 5) * 3, 0, 7); ctx.fill(); ctx.stroke(); }
   if (G.buffs.magnet > 0) { const r = 60 + (G.t * 90) % 60; ctx.strokeStyle = `rgba(255,90,120,${0.7 - (r - 60) / 90})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(sx, y - 56, r, 0, 7); ctx.stroke(); ctx.font = '26px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('🧲', sx + 36, y - 104 + Math.sin(G.t * 5) * 4); }
   if (G.buffs.feather > 0) { ctx.font = '30px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('🪶', sx - 34, y - 96 + Math.sin(G.t * 6) * 4); }
+  const hat = LAND.wear.hat && WEAR[LAND.wear.hat];
+  if (hat) { ctx.save(); ctx.font = '38px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.translate(sx + 4, y - HERO.drawH + 6); ctx.rotate(rot - 0.15); ctx.globalAlpha = blink ? 0.35 : 1; ctx.fillText(hat.icon, 0, 0); ctx.restore(); }
   if (G.special && G.special.kind === 'dash') { ctx.strokeStyle = 'rgba(150,200,255,.85)'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(sx + 40, y - 60, 60, -1.2, 1.2); ctx.stroke(); }
 }
 function drawSlashRing() {
@@ -965,6 +969,7 @@ function drawFx() {
     if (p.kind === 'star') drawStar(x, p.y, p.size, p.color);
     else if (p.kind === 'heart') drawHeart(x, p.y, p.size, p.color);
     else if (p.kind === 'note') { ctx.font = `900 ${p.size * 1.6}px sans-serif`; ctx.fillStyle = p.color; ctx.textAlign = 'center'; ctx.fillText('♪', x, p.y); }
+    else if (p.kind === 'emo') { ctx.font = `${p.size}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.text, x, p.y); }
     else if (p.kind === 'bubble') { ctx.strokeStyle = p.color; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, p.y, p.size, 0, 7); ctx.stroke(); }
     else if (p.kind === 'paw') { ctx.strokeStyle = '#ff9ad5'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x, p.y); ctx.lineTo(p.tx - cx, p.ty); ctx.stroke(); drawHeart(p.tx - cx, p.ty, 18, '#ff6fa8'); }
     else { ctx.fillStyle = p.color; ctx.fillRect(x - p.size / 2, p.y - p.size / 2, p.size, p.size); }

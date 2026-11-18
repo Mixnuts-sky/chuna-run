@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ちゅなランド">
+<meta name="theme-color" content="#7fc8ff">
+<title>ちず で おでかけ</title>
+<link rel="icon" href="img/icon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&family=M+PLUS+Rounded+1c:wght@700;900&display=swap">
+<link rel="stylesheet" href="css/run.css">
+<link rel="stylesheet" href="css/land.css">
+<link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv" class="view3d"></canvas>
+
+  <!-- あるいて いる とき -->
+  <div id="hud" class="hud" hidden>
+    <div class="map-panel">
+      <div class="map-h">🗺️ ちず <small>（タップ で おおきく）</small></div>
+      <canvas id="mapcv"></canvas>
+    </div>
+    <div class="goal" id="goal"></div>
+    <button type="button" class="m-quit" id="tripQuit">✖ やめる</button>
+    <button type="button" class="m-hint" id="hint">💡 ヒント</button>
+    <div class="friend" id="friendBox"><img id="friendImg" alt=""><div class="bubble" id="bubble" hidden></div></div>
+    <div class="pad">
+      <button type="button" class="pb" id="b_left">↰<small>ひだり</small></button>
+      <div class="pad-mid">
+        <button type="button" class="pb go" id="b_go">⬆<small>すすむ</small></button>
+        <button type="button" class="pb sm" id="b_back">↩<small>うしろ</small></button>
+      </div>
+      <button type="button" class="pb" id="b_right">↱<small>みぎ</small></button>
+    </div>
+  </div>
+  <div id="bigmap" class="bigmap" hidden><canvas id="bigcv"></canvas><div class="bigmap-t">タップ で とじる</div></div>
+
+  <!-- はじめ -->
+  <div id="scrStart" class="scr card-scr map-start" hidden>
+    <div class="card">
+      <h2>🗺️ ちず で おでかけ</h2>
+      <p class="sub center">ちず と まわり の けしき を みて、いっしょ に いる こ を いきたい ところ へ つれて いこう！</p>
+      <div class="pick-row" id="placeList"></div>
+      <div class="pick-row" id="diffList"></div>
+      <div class="foot">
+        <button type="button" class="mid go" id="goTrip">しゅっぱつ！</button>
+        <button type="button" class="mid" id="startHome">🏠 ちゅなランド</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ついた -->
+  <div id="scrArrive" class="scr card-scr" hidden>
+    <div class="card small arrive">
+      <h2 id="arrTitle"></h2>
+      <div id="arrBody"></div>
+      <div class="foot">
+        <button type="button" class="mid go" id="arrNext">つぎ の ばしょ へ</button>
+        <button type="button" class="mid go" id="arrAgain" hidden>もういちど</button>
+        <button type="button" class="mid" id="arrHome" hidden>🏠 ちゅなランド</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="rotate" class="rotate"><div>📱↻</div><div>がめん を よこ に してね</div></div>
+<script src="js/map.js"></script>
+</body>
+</html>
